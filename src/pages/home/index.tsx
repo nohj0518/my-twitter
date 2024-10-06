@@ -1,3 +1,3 @@
 export default function HomePage() {
-  return <>home page 현주</>;
+  return <>home page</>;
 }
