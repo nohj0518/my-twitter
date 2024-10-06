@@ -1,0 +1,626 @@
+@import "./utils.scss";
+
+// 전체 레이아웃
+body {
+  margin: 0;
+  font-family: $font;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  background-color: $background;
+  color: $white;
+}
+
+.layout {
+  max-width: 600px;
+  margin: 0 auto;
+  position: relative;
+  border-left: 1px solid $border;
+  border-right: 1px solid $border;
+  min-height: 100vh;
+}
+
+.button {
+  padding: 0.2rem 0.8rem;
+  border-radius: 999px;
+  font-size: 12px;
+  line-height: 1.25rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+
+  &:disabled {
+    opacity: 0.5;
+  }
+}
+
+.transparent {
+  background-color: transparent;
+  backdrop-filter: blur(10px);
+}
+
+.sticky {
+  width: 100%;
+  position: sticky;
+  max-width: 600px;
+  margin: 0 auto;
+  top: 0;
+}
+
+// footer
+.footer {
+  position: fixed;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  z-index: 10;
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+  background-color: transparent;
+  color: $white;
+
+  &__grid {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    background-color: transparent;
+
+    &--text {
+      background-color: transparent;
+    }
+
+    button {
+      border: none;
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      align-items: center;
+      font-size: 15px;
+      background-color: transparent;
+      padding: 16px 0px;
+      backdrop-filter: blur(10px);
+
+      svg {
+        backdrop-filter: blur(10px);
+        background-color: transparent;
+      }
+    }
+  }
+}
+
+@include xsMobile {
+  .footer {
+    display: none;
+  }
+
+  .layout {
+    border: none;
+  }
+}
+
+@include mobile {
+  .footer {
+    &__grid {
+      &--text {
+        display: none;
+      }
+      button {
+        font-size: 20px;
+      }
+    }
+  }
+
+  .layout {
+    border: none;
+  }
+}
+
+@include tablet {
+  .footer {
+    &__grid {
+      &--text {
+        display: none;
+      }
+      button {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .layout {
+    border: none;
+  }
+}
+
+// home 레이아웃
+.home {
+  &__search-div {
+    display: flex;
+    justify-content: center;
+  }
+
+  &__search {
+    @extend .post-form__input;
+    background-color: $backgroundLight;
+    border-radius: 20px;
+    margin-bottom: 20px;
+    padding: 12px;
+    width: 90% !important;
+    font-size: 15px;
+    font-weight: 600;
+
+    &:focus {
+      border: 1px solid $primaryColor;
+      background-color: $activeBg;
+    }
+  }
+
+  &__top {
+    @extend .transparent;
+    @extend .sticky;
+  }
+
+  &__title {
+    background-color: transparent;
+    width: 90%;
+    padding: 16px;
+    font-weight: 700;
+    font-size: 20px;
+  }
+
+  &__tabs {
+    background-color: transparent;
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  &__tab {
+    background-color: transparent;
+    text-align: center;
+    font-weight: 500;
+    padding: 16px;
+    cursor: pointer;
+
+    &--active {
+      font-weight: 700;
+      border-bottom: 2px solid $activeBorder;
+    }
+
+    &:hover,
+    &:focus {
+      background-color: $activeBg;
+    }
+  }
+}
+
+.post-form {
+  &__profile {
+    padding: 16px;
+
+    .post-form__input {
+      border-bottom: 1px solid $gray;
+      padding: 8px 2px;
+      font-size: 16px;
+      width: 100%;
+      margin-bottom: 20px;
+
+      &:active,
+      &:focus {
+        border-bottom: 1px solid white;
+      }
+    }
+  }
+
+  &__image-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__attachment {
+    display: flex;
+    align-items: end;
+    gap: 16px;
+  }
+
+  &__clear-btn {
+    @extend .button;
+    padding: 0.2rem 0.8rem;
+    background-color: $danger;
+
+    &:hover,
+    &:focus {
+      background-color: $dangerDark;
+    }
+  }
+
+  &__input {
+    font-family: $font;
+    padding: 8px;
+    border: none;
+    resize: none;
+    outline: none;
+    margin-top: 8px;
+    width: calc(100% - 32px);
+  }
+
+  &__hashtags {
+    padding: 16px;
+    border-bottom: 1px solid $border;
+
+    &-outputs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 1px;
+      align-items: center;
+    }
+
+    &-tag {
+      font-size: 14px;
+      border: 1px solid $primaryColor;
+      color: $primaryColor;
+      border-radius: 10px;
+      padding: 2px 8px;
+      margin-right: 6px;
+      cursor: pointer;
+
+      &:hover,
+      &:focus {
+        color: $activeBorder;
+        border: 1px solid $activeBorder;
+      }
+    }
+  }
+
+  &__textarea {
+    font-family: $font;
+    min-height: 120px;
+    display: block;
+    width: calc(100% - 32px);
+    padding: 16px;
+    border: none;
+    resize: none;
+    outline: none;
+    font-size: 20px;
+    border-bottom: 1px solid $border;
+
+    &::placeholder {
+      font-family: $font;
+      color: $grayText;
+      font-size: 20px;
+    }
+  }
+
+  &__submit-area {
+    display: flex;
+    padding: 0.75rem 1rem;
+    justify-content: space-between;
+    border-bottom: 1px solid $border;
+    align-items: center;
+
+    .post-form__file {
+      display: flex;
+      padding: 0 1rem;
+      flex-direction: column;
+      justify-content: center;
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none;
+    }
+  }
+
+  &__submit-btn {
+    @extend .button;
+    padding: 0.5rem 1rem;
+    background-color: $primaryColor;
+  }
+}
+
+// Post 레이아웃
+.post {
+  &__image-div {
+    padding: 16px;
+  }
+
+  &__header {
+    button {
+      border: none;
+      padding: 16px;
+    }
+
+    &-btn {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+    }
+  }
+
+  &__no-posts {
+    padding: 16px;
+
+    .post__text {
+      font-size: 14px;
+      border: 1px solid $gray;
+      padding: 16px;
+      border-radius: 4px;
+    }
+  }
+
+  padding-bottom: 40px;
+
+  &__flex {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+
+    &--between {
+      display: flex;
+      width: 100%;
+      justify-content: space-between;
+    }
+  }
+
+  &__follow-btn {
+    @extend .button;
+    background-color: $white;
+    color: $activeBorder;
+
+    &:hover,
+    &:focus {
+      background-color: $activeBorder;
+      color: $white;
+    }
+  }
+
+  &__following-btn {
+    @extend .button;
+    background-color: $activeBorder;
+    color: $white;
+
+    &:hover,
+    &:focus {
+      background-color: $white;
+      color: $activeBorder;
+    }
+  }
+
+  &__email,
+  &__createdAt {
+    font-size: 12px;
+    color: $grayText;
+  }
+
+  &__box {
+    padding: 10px 0px;
+    border-bottom: 1px solid $border;
+
+    a {
+      text-decoration: none;
+    }
+
+    &-profile {
+      text-decoration: none;
+      padding: 0px 10px;
+
+      &-img,
+      &-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        margin-right: 10px;
+      }
+    }
+
+    &-content {
+      display: block;
+      font-weight: 500;
+      padding: 16px 4px;
+    }
+
+    &-footer {
+      padding: 0 16px;
+      margin-top: 10px;
+      font-size: 14px;
+      display: flex;
+      gap: 8px;
+      flex-direction: row-reverse;
+
+      button {
+        @extend .button;
+
+        &.post__delete {
+          background-color: $danger;
+
+          &:hover,
+          &:focus {
+            background-color: $dangerDark;
+          }
+        }
+
+        &.post__edit {
+          background-color: $gray;
+
+          a {
+            background-color: transparent;
+          }
+
+          &:hover,
+          &:focus {
+            background-color: $grayDark;
+          }
+        }
+
+        &.post__likes,
+        &.post__comments {
+          @extend .post__flex;
+
+          &:hover,
+          &:focus {
+            color: $gray;
+          }
+        }
+      }
+    }
+  }
+}
+
+// form 레이아웃
+.form {
+  margin: 0 auto;
+  max-width: 680px;
+  padding: 20px;
+
+  input {
+    height: 20px;
+    padding: 10px;
+    border-radius: 0.3rem;
+    border: 1px solid lightgray;
+    width: 96%;
+    max-width: 680px;
+  }
+
+  &__block {
+    margin-top: 20px;
+    width: 100%;
+  }
+
+  &__block--lg {
+    margin-top: 28px;
+    width: 100%;
+  }
+
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 10px;
+    margin-top: 20px;
+  }
+
+  &__btn--submit {
+    @extend .button;
+    width: 100%;
+    height: 48px;
+    font-weight: 600;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 0 auto;
+    color: white;
+    background-color: $primaryColor;
+
+    &:hover,
+    &:focus {
+      background-color: $activeBorder;
+    }
+  }
+
+  &__title {
+    text-align: center;
+    font-size: 24px;
+    font-weight: 700;
+    padding-bottom: 20px;
+  }
+
+  &__link {
+    margin-left: 10px;
+    text-decoration: none;
+    color: $grayText;
+
+    &:hover,
+    &:focus {
+      color: $gray;
+    }
+  }
+
+  &__error {
+    color: red;
+  }
+
+  &__btn--google {
+    @extend .form__btn--submit;
+    background-color: $white;
+    color: $activeBorder;
+
+    &:hover,
+    &:focus {
+      background-color: $activeBorder;
+      color: $white;
+    }
+  }
+
+  &__btn--github {
+    @extend .form__btn--submit;
+    background-color: black;
+    color: white;
+
+    &:hover,
+    &:focus {
+      background-color: $activeBg;
+      color: $white;
+    }
+  }
+}
+
+// 프로필 레이아웃
+.profile {
+  display: flex;
+  padding: 0 1rem;
+  margin-top: 2.5rem;
+  justify-content: space-between;
+  align-items: center;
+
+  &__flex {
+    display: flex;
+    gap: 8px;
+  }
+
+  &__image {
+    border-radius: 50%;
+    width: 100px;
+    height: 100px;
+  }
+
+  &__btn {
+    @extend .button;
+    background-color: $primaryColor;
+
+    &:hover,
+    &:focus {
+      background-color: $activeBorder;
+    }
+
+    &--language {
+      @extend .button;
+      background-color: $gray;
+
+      &:hover,
+      &:focus {
+        background-color: $grayDark;
+      }
+    }
+  }
+
+  &__text {
+    padding: 0 1rem;
+    margin-top: 20px;
+  }
+
+  &__name {
+    font-size: 16px;
+    color: $white;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  &__email {
+    font-size: 14px;
+    color: $grayText;
+    margin-bottom: 4px;
+  }
+}
