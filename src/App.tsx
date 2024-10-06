@@ -1,10 +1,12 @@
 import Router from "components/Router";
-import "./App.css";
+import { Layout } from "components/Layout";
 
 function App() {
   return (
     <>
-      <Router />
+      <Layout>
+        <Router />
+      </Layout>
     </>
   );
 }
