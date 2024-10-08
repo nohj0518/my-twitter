@@ -20,7 +20,8 @@
   "include": ["src"],
   "paths": {
     "pages/*": ["pages/*"],
-    "component/*": ["component/*"],
-    "firebaseApp/*": ["firebaseApp/*"]
+    "components/*": ["components/*"],
+    "firebaseApp/*": ["firebaseApp/*"],
+    "context/*": ["context/*"]
   }
 }
