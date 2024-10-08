@@ -12,7 +12,6 @@ export let app: FirebaseApp;
  * blog 프로젝트에서도 단 한번도 로그인하지 않은 사람만 로그인 페이지를 가장 처음 보여주는데
  * 위와 같이 구현되어 있기 때문임
  */
-//
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_API_KEY,
