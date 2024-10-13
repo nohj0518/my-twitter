@@ -19,7 +19,6 @@ export default function PostForm() {
     } = e;
 
     const file = files?.[0];
-    const test = files[0];
     const fileReader = new FileReader();
     fileReader?.readAsDataURL(file);
     fileReader.onloadend = (e: any) => {
