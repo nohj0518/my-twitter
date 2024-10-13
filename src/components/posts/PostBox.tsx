@@ -7,6 +7,8 @@ import { useContext } from "react";
 import AuthContext from "context/AuthContext";
 import { deleteDoc, doc } from "firebase/firestore";
 import { db } from "firebaseApp";
+import { storage } from "firebaseApp";
+import { ref, deleteObject } from "firebase/storage";
 import { toast } from "react-toastify";
 interface PostBoxProps {
   post: PostProps;
@@ -14,9 +16,16 @@ interface PostBoxProps {
 export default function PostBox({ post }: PostBoxProps) {
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const imgRef = ref(storage, post?.imgUrl);
   const handleDelete = async () => {
     const confirm = window.confirm("해당 게시글을 삭제하시겠습니까 ?");
     if (confirm) {
+      if (post.imgUrl) {
+        deleteObject(imgRef).catch((error) => {
+          console.log(error);
+        });
+      }
+
       await deleteDoc(doc(db, "posts", post.id));
       navigate("/");
       toast.success("게시글을 삭제 했습니다.");

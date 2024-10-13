@@ -1,18 +1,42 @@
 import { FiImage } from "react-icons/fi";
 import { useCallback, useEffect, useState } from "react";
 import { updateDoc, doc, getDoc } from "firebase/firestore";
-import { db } from "firebaseApp";
+import { db, storage } from "firebaseApp";
 import { toast } from "react-toastify";
 import { useNavigate, useParams } from "react-router-dom";
 import { PostProps } from "pages/home";
+import {
+  uploadString,
+  getDownloadURL,
+  ref,
+  deleteObject,
+} from "firebase/storage";
+import { v4 as uuidv4 } from "uuid";
+import { useContext } from "react";
+import AuthContext from "context/AuthContext";
 export default function PostEditForm() {
   const [content, setContent] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [hashTag, setHashTag] = useState<string>("");
   const [post, setPost] = useState<PostProps | null>(null);
+  const [imgFile, setImgFile] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
-  const handleFileUpload = () => {};
+  const { user } = useContext(AuthContext);
 
+  const handleFileUpload = (e: any) => {
+    const {
+      target: { files },
+    } = e;
+
+    const file = files?.[0];
+    const fileReader = new FileReader();
+    fileReader?.readAsDataURL(file);
+    fileReader.onloadend = (e: any) => {
+      const { result } = e?.currentTarget;
+      setImgFile(result);
+    };
+  };
   const params = useParams();
 
   const getPost = useCallback(async () => {
@@ -22,6 +46,7 @@ export default function PostEditForm() {
       setPost({ ...docSnap.data(), id: docSnap.id } as PostProps);
       setContent(docSnap.data()?.content);
       setTags(docSnap.data()?.hashTags);
+      setImgFile(docSnap.data()?.imgUrl);
     }
   }, [params.id]); // params.id 가 있을때만 useCallback 실행됨
 
@@ -29,20 +54,41 @@ export default function PostEditForm() {
     if (params.id) getPost();
   }, [getPost, params.id]);
   const onSubmit = async (e: any) => {
+    setIsSubmitting(true);
+    const key = `${user?.uid}/${uuidv4()}`;
+    const storageRef = ref(storage, key);
     e.preventDefault();
 
     try {
       if (post) {
+        // 기존사진을 삭제
+        if (post?.imgUrl) {
+          const imgRef = ref(storage, post?.imgUrl);
+          await deleteObject(imgRef).catch((error) => {
+            console.log(error);
+          });
+        }
+
+        // 이미지를 먼저 storage 로 업로드 하기
+        let imgUrl = "";
+        if (imgFile) {
+          const data = await uploadString(storageRef, imgFile, "data_url");
+          imgUrl = await getDownloadURL(data?.ref);
+        }
         const postRef = doc(db, "posts", post.id);
         await updateDoc(postRef, {
           content: content,
           hashTags: tags,
+          imgUrl: imgUrl,
         });
         navigate(`/posts/${post.id}`);
         toast.success("게시글을 수정하였습니다.");
+        setImgFile(null);
+        setIsSubmitting(false);
       }
     } catch (e: any) {}
   };
+
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const {
       target: { name, value },
@@ -71,6 +117,9 @@ export default function PostEditForm() {
   };
   const removeTag = (tag: string) => {
     setTags(tags?.filter((val) => val !== tag));
+  };
+  const handleDeleteImg = () => {
+    setImgFile(null);
   };
   return (
     <>
@@ -109,9 +158,31 @@ export default function PostEditForm() {
           />
         </div>
         <div className="post-form__submit-area">
-          <label htmlFor="file-input" className="post-form__title">
-            <FiImage className="post-form__file-icon" />
-          </label>
+          <div className="post-form__image-area">
+            <label htmlFor="file-input" className="post-form__title">
+              <FiImage className="post-form__file-icon" />
+            </label>
+            <input
+              type="file"
+              id="file-input"
+              name="file-input"
+              accept="image/*"
+              onChange={handleFileUpload}
+              className="hidden"
+            />
+          </div>
+          {imgFile && (
+            <div className="post-form__attachment">
+              <img src={imgFile} alt="attachment" width={100} height={100} />
+              <button
+                className="post-form__clear-btn"
+                type="button"
+                onClick={handleDeleteImg}
+              >
+                Clear
+              </button>
+            </div>
+          )}
           <input
             type="file"
             name="file-input"
@@ -119,7 +190,12 @@ export default function PostEditForm() {
             onChange={handleFileUpload}
             className="hidden"
           />
-          <input type="submit" value="수정" className="post-form__submit-btn" />
+          <input
+            type="submit"
+            value="수정"
+            className="post-form__submit-btn"
+            disabled={isSubmitting}
+          />
         </div>
       </form>
     </>
