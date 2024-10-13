@@ -4,14 +4,13 @@ import PostBox from "components/posts/PostBox";
 import Loader from "components/loader/Loader";
 import { doc, getDoc } from "firebase/firestore";
 import { db } from "firebaseApp";
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 
-import { IoIosArrowBack } from "react-icons/io";
+import PostHeader from "components/posts/PostHeader";
 
 export default function PostDetail() {
   const [post, setPost] = useState<PostProps | null>(null);
-  const navigate = useNavigate();
   const params = useParams();
 
   const getPost = useCallback(async () => {
@@ -27,11 +26,7 @@ export default function PostDetail() {
   return (
     <>
       <div className="post">
-        <div className="post__header">
-          <button type="button" onClick={() => navigate(-1)}>
-            <IoIosArrowBack className="post__header-btn" />
-          </button>
-        </div>
+        <PostHeader />
         {post ? <PostBox post={post} /> : <Loader />}
       </div>
     </>
