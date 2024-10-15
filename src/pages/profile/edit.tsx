@@ -14,6 +14,7 @@ import { storage } from "firebaseApp";
 import { updateProfile } from "firebase/auth";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import useTranslation from "hooks/useTranslation";
 
 const STORAGE_DOWNLOAD_URL = "https://firebasestorage.googleapis.com";
 
@@ -22,6 +23,7 @@ export default function ProfileEdit() {
   const [imgUrl, setImgUrl] = useState<string | null>(null);
   const { user } = useContext(AuthContext);
   const navigate = useNavigate();
+  const t = useTranslation();
 
   useEffect(() => {
     if (user?.photoURL) setImgUrl(user?.photoURL);
@@ -129,7 +131,7 @@ export default function ProfileEdit() {
                     type="button"
                     onClick={handleDeleteImg}
                   >
-                    Clear
+                    {t("BUTTON_DELETE")}
                   </button>
                 </div>
               )}

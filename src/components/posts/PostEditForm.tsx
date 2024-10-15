@@ -14,6 +14,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { useContext } from "react";
 import AuthContext from "context/AuthContext";
+import useTranslation from "hooks/useTranslation";
 export default function PostEditForm() {
   const [content, setContent] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
@@ -23,6 +24,7 @@ export default function PostEditForm() {
   const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
   const navigate = useNavigate();
   const { user } = useContext(AuthContext);
+  const t = useTranslation();
 
   const handleFileUpload = (e: any) => {
     const {
@@ -130,7 +132,7 @@ export default function PostEditForm() {
           required
           name="content"
           id="content"
-          placeholder="What is happening"
+          placeholder={t("POST_PLACEHOLDER")}
           onChange={onChange}
           value={content}
         />
@@ -151,7 +153,7 @@ export default function PostEditForm() {
             className="post-form__input"
             name="hashtag"
             id="hashtag"
-            placeholder="해시태그+스페이스 입력"
+            placeholder={t("POST_HASHTAG")}
             onChange={onChangeHashTag}
             onKeyUp={handleKeyUp}
             value={hashTag}
@@ -179,7 +181,7 @@ export default function PostEditForm() {
                 type="button"
                 onClick={handleDeleteImg}
               >
-                Clear
+                {t("BUTTON_DELETE")}
               </button>
             </div>
           )}

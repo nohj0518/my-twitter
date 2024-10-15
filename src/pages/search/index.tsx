@@ -8,6 +8,7 @@ import {
   where,
 } from "firebase/firestore";
 import { db } from "firebaseApp";
+import useTranslation from "hooks/useTranslation";
 import { PostProps } from "pages/home";
 import { useContext, useEffect, useState } from "react";
 
@@ -15,6 +16,7 @@ export default function SearchPage() {
   const [posts, setPosts] = useState<PostProps[]>([]);
   const [tagQuery, setTagQuery] = useState<string>("");
   const { user } = useContext(AuthContext);
+  const t = useTranslation();
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const {
@@ -63,7 +65,7 @@ export default function SearchPage() {
           posts?.map((post) => <PostBox post={post} key={post.id} />)
         ) : (
           <div className="post__no-posts">
-            <div className="post__text">게시글이 없습니다.</div>
+            <div className="post__text">{t("NO_POSTS")}</div>
           </div>
         )}
       </div>
