@@ -11,7 +11,6 @@ import {
 } from "firebase/firestore";
 import AuthContext from "context/AuthContext";
 import { db } from "firebaseApp";
-import { User } from "firebase/auth";
 export interface PostProps {
   id: string;
   email: string;
